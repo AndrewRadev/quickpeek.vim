@@ -7,7 +7,7 @@ let s:keepcpo = &cpo
 set cpo&vim
 
 if !exists('*popup_create')
-  silent echomsg "This version of Vim doesn't have popups."
+  " Then this version of Vim doesn't support popups
   finish
 endif
 

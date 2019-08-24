@@ -1,3 +1,8 @@
+if !exists('*popup_create')
+  " Then this version of Vim doesn't support popups
+  finish
+endif
+
 command! -buffer Quickpeek       call s:Start()
 command! -buffer QuickpeekStop   call s:Stop()
 command! -buffer QuickpeekToggle call s:Toggle()
