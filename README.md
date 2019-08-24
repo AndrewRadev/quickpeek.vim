@@ -1,6 +1,28 @@
 ## Usage
 
-TODO
+Turn on/off preview popup (commands only defined in quickfix window):
+
+```
+:Quickpeek
+:QuickpeekStop
+:QuickpeekToggle
+```
+
+It's recommended to just come up with a mapping for `QuickpeekToggle`, for instance, in `~/.vim/ftplugin/qf.vim`, you can do this:
+
+```
+nnoremap <c-p> :QuickpeekToggle<cr>
+```
+
+To turn preview popup on automatically, put this in your `.vimrc`:
+
+```
+let g:quickpeek_auto = v:true
+```
+
+## Requirements
+
+The plugin needs Vim with popup window support (v8.1 with a large patch number), otherwise it'll silently do nothing. If you'd like to check if you have popups, try `echo exists('*popup_create')`.
 
 ## Contributing
 

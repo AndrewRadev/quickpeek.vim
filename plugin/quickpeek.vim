@@ -6,6 +6,11 @@ let g:loaded_quickpeek = '0.0.1' " version number
 let s:keepcpo = &cpo
 set cpo&vim
 
+if !exists('*popup_create')
+  silent echomsg "This version of Vim doesn't have popups."
+  finish
+endif
+
 if !exists('g:quickpeek_auto')
   let g:quickpeek_auto = v:true
 endif
