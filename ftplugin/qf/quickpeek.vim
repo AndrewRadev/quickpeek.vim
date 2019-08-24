@@ -20,10 +20,17 @@ function! s:Start()
     autocmd WinLeave    <buffer> call s:HidePopup()
     autocmd WinEnter    <buffer> call s:ShowPopup()
 
-    autocmd FileType * if &ft != 'qf' | call s:HidePopup() | endif
+    autocmd FileType * if &ft != 'qf' | call s:ClearAllPopups() | endif
   augroup END
 
   call s:ShowPopup()
+endfunction
+
+function s:ClearAllPopups()
+  for p in g:quickpeek_popups
+    call popup_close(p)
+  endfor
+  let g:quickpeek_popups = []
 endfunction
 
 function! s:HidePopup()
@@ -90,6 +97,7 @@ function! s:ShowPopup()
         \ 'border':    [],
         \ 'title':     "Quickpeek"
         \ })
+  call add(g:quickpeek_popups, b:quickpeek_popup)
 endfunction
 
 function! s:GetCommandOutput(command)
