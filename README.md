@@ -1,4 +1,4 @@
-![Screenshot](http://i.andrewradev.com/633bb5fa2d8cc713a0cec95845d34b59.jpg)
+![Screenshot](http://i.andrewradev.com/88051d292a4314f88151f0887c845838.jpg)
 
 ## Usage
 
