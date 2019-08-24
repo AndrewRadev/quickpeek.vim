@@ -1,3 +1,5 @@
+![Screenshot](http://i.andrewradev.com/633bb5fa2d8cc713a0cec95845d34b59.jpg)
+
 ## Usage
 
 Turn on/off preview popup (commands only defined in quickfix window):
