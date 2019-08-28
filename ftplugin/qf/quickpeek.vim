@@ -61,10 +61,10 @@ function! s:ShowPopup()
     return
   endif
 
-  let file_name = s:GetCommandOutput(':file')
-  if stridx(file_name, '"[Quickfix List]"') == 0
+  let wi = getwininfo(win_getid())[0]
+  if wi.quickfix
     let qf_list = getqflist()
-  elseif stridx(file_name, '"[Location List]"') == 0
+  elseif wi.loclist
     let qf_list = getloclist(0)
   else
     let qf_list = []
@@ -103,18 +103,6 @@ function! s:ShowPopup()
         \ 'title':     "Quickpeek"
         \ })
   call add(g:quickpeek_popups, b:quickpeek_popup)
-endfunction
-
-function! s:GetCommandOutput(command)
-  redir => output
-  exe a:command
-  redir END
-
-  " Trim whitespace:
-  let output = substitute(output, '^\_s\+', '', '')
-  let output = substitute(output, '\_s\+$', '', '')
-
-  return output
 endfunction
 
 if g:quickpeek_auto
