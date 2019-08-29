@@ -36,7 +36,7 @@ function! quickpeek#Stop()
   let b:quickpeek_active = v:false
 endfunction
 
-function s:ClearAllPopups()
+function! s:ClearAllPopups()
   for p in g:quickpeek_popups
     call popup_close(p)
   endfor
@@ -86,16 +86,25 @@ function! s:ShowPopup()
   if exists('b:quickpeek_popup')
     call popup_close(b:quickpeek_popup)
   endif
-  let b:quickpeek_popup = popup_create(qf_entry.bufnr, {
-        \ 'maxheight': 7,
+
+  let maxheight = get(g:quickpeek_popup_options, 'maxheight', 7)
+  let topline   = qf_entry.lnum - (maxheight / 2)
+
+  let options = {
+        \ 'pos':    'botleft',
+        \ 'border': [],
+        \ 'title':  "Quickpeek"
+        \ }
+  call extend(options, g:quickpeek_popup_options)
+  call extend(options, {
+        \ 'maxheight': maxheight,
         \ 'minwidth':  wininfo.width - 3,
         \ 'maxwidth':  wininfo.width - 3,
-        \ 'pos':       'botleft',
         \ 'col':       wininfo.wincol,
         \ 'line':      wininfo.winrow - 2,
-        \ 'firstline': max([qf_entry.lnum - 3, 0]),
-        \ 'border':    [],
-        \ 'title':     "Quickpeek"
+        \ 'firstline': max([topline, 0]),
         \ })
+
+  let b:quickpeek_popup = popup_create(qf_entry.bufnr, options)
   call add(g:quickpeek_popups, b:quickpeek_popup)
 endfunction

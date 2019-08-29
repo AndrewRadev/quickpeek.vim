@@ -64,6 +64,9 @@ Note that auto mode is currently experimental and results in some weird issues
 for me sometimes. If you end up with popups hanging around, you can close all
 of them with `:call popup_close()`.
 
+You can customize the popup that shows up using the
+|g:quickpeek_popup_options| variable.
+
 
 ==============================================================================
 SETTINGS                                                    *quickpeek-settings*
@@ -78,6 +81,30 @@ If set to |v:true| (or 1), the plugin will automatically open a preview
 whenever the quickfix or location list window is opened. Note that this
 currently break things sometimes and requires some debugging. If you run into
 issues, it's recommended to trigger popups manually.
+
+                                                     *g:quickpeek_popup_options*
+>
+    let g:quickpeek_popup_options = {'title': 'Preview'}
+<
+Default value: {}
+
+Additional popup options can be given that will be added to the |popup_create|
+call. For example:
+>
+    let g:quickpeek_popup_options = {
+        \ 'borderchars': ['-', '|', '-', '|', '+', '+', '+', '+'],
+        \ 'title':       'Preview',
+        \ 'time':        3000,
+        \ }
+<
+This will change the title from "Quickpeek" to "Preview", give the border a
+more ASCII look, and hide the popup in 3 seconds.
+
+The full list of options can be read in the helpfiles for
+|popup_create-arguments|. Some options won't really make sense -- for
+instance, adding a close button will work, but a new preview popup is created
+on every move to a different line, so closing a popup might not do what you'd
+intuitively expect it to.
 
 
 ==============================================================================

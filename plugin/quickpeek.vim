@@ -15,6 +15,10 @@ if !exists('g:quickpeek_auto')
   let g:quickpeek_auto = v:true
 endif
 
+if !exists('g:quickpeek_popup_options')
+  let g:quickpeek_popup_options = {}
+endif
+
 let g:quickpeek_popups = []
 
 let &cpo = s:keepcpo
