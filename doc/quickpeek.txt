@@ -1,12 +1,12 @@
-*quickpeek.txt*	TODO
+*quickpeek.txt*	Show a preview popup on quickfix entries
 
 ==============================================================================
 CONTENTS                                        *quickpeek*   *quickpeek-contents*
 
     Installation................................: |quickpeek-installation|
+    Requirements................................: |quickpeek-requirements|
     Usage.......................................: |quickpeek-usage|
     Settings....................................: |quickpeek-settings|
-    Internals...................................: |quickpeek-internals|
     Issues......................................: |quickpeek-issues|
 
 
@@ -27,25 +27,58 @@ The command is (provided you're in ~/.vim):
 <
 
 Another way is to simply copy all the essential directories inside the ~/.vim
-directory: TODO list of directories
+directory: autoload, doc, ftplugin, plugin.
+
+
+==============================================================================
+REQUIREMENTS                                            *quickpeek-requirements*
+
+The plugin needs Vim with popup window support (v8.1 with a large patch
+number), otherwise it'll silently do nothing. If you'd like to check if you
+have popups, try:
+>
+    :echo exists('*popup_create')
+<
+If you get the value of "1", that means you have popup support.
 
 
 ==============================================================================
 USAGE                                                          *quickpeek-usage*
 
-TODO
+Turn on/off preview popup (commands only defined in quickfix window):
+>
+    :Quickpeek
+    :QuickpeekStop
+    :QuickpeekToggle
+<
+It's recommended to create a mapping for `QuickpeekToggle`, for instance, in
+`~/.vim/ftplugin/qf.vim`, you can do this:
+>
+    nnoremap <buffer> <c-p> :QuickpeekToggle<cr>
+<
+To turn preview popup on automatically, put this in your `.vimrc`:
+>
+    let g:quickpeek_auto = v:true
+<
+Note that auto mode is currently experimental and results in some weird issues
+for me sometimes. If you end up with popups hanging around, you can close all
+of them with `:call popup_close()`.
 
 
 ==============================================================================
 SETTINGS                                                    *quickpeek-settings*
 
-TODO
+                                                              *g:quickpeek_auto*
+>
+    let g:quickpeek_auto = v:true
+<
+Default value: v:false
 
+If set to |v:true| (or 1), the plugin will automatically open a preview
+whenever the quickfix or location list window is opened. Note that this
+currently break things sometimes and requires some debugging. If you run into
+issues, it's recommended to trigger popups manually.
 
-==============================================================================
-INTERNALS                                                  *quickpeek-internals*
-
-TODO
 
 ==============================================================================
 ISSUES                                                        *quickpeek-issues*
