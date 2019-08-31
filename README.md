@@ -36,6 +36,10 @@ The plugin needs Vim with popup window support (v8.1 with a large patch number),
 
 If you get the value of "1", that means you have popup support.
 
+## Related Work
+
+The [quickr-preview](https://github.com/ronakg/quickr-preview.vim) plugin provides previews of quickfix items in customizable buffers.
+
 ## Contributing
 
 Pull requests are welcome, but take a look at [CONTRIBUTING.md](https://github.com/AndrewRadev/quickpeek.vim/blob/master/CONTRIBUTING.md) first for some guidelines. Be sure to abide by the [CODE_OF_CONDUCT.md](https://github.com/AndrewRadev/quickpeek.vim/blob/master/CODE_OF_CONDUCT.md) as well.
