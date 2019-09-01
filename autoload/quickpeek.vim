@@ -16,9 +16,9 @@ function! quickpeek#Start()
 
   exe "augroup quickpeek_popup_".bufnr('%')
     autocmd!
-    autocmd CursorMoved <buffer> call s:ShowPopup()
+    autocmd CursorMoved <buffer> call s:MaybeShowPopup()
     autocmd WinLeave    <buffer> call s:HidePopup()
-    autocmd WinEnter    <buffer> call s:ShowPopup()
+    autocmd WinEnter    <buffer> call s:MaybeShowPopup()
 
     autocmd FileType * if &ft != 'qf' | call s:ClearAllPopups() | endif
   augroup END
@@ -51,11 +51,22 @@ function! s:HidePopup()
   unlet! b:quickpeek_line
 endfunction
 
-function! s:ShowPopup()
+function! s:MaybeShowPopup()
   if line('.') == get(b:, 'quickpeek_line', -1)
     return
   endif
 
+  if exists('*timer_start')
+    " Show the popup on the next tick, otherwise filetype detection doesn't
+    " get triggered.
+    call timer_start(1, {-> s:ShowPopup()})
+  else
+    " No timers available, let's just show the popup immediately.
+    call s:ShowPopup()
+  endif
+endfunction
+
+function! s:ShowPopup()
   let wi = getwininfo(win_getid())[0]
   if wi.quickfix
     let qf_list = getqflist()
@@ -105,6 +116,6 @@ function! s:ShowPopup()
         \ 'firstline': max([topline, 0]),
         \ })
 
-  let b:quickpeek_popup = popup_create(qf_entry.bufnr, options)
+  silent let b:quickpeek_popup = popup_create(qf_entry.bufnr, options)
   call add(g:quickpeek_popups, b:quickpeek_popup)
 endfunction
