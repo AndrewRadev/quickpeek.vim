@@ -12,7 +12,7 @@ if !exists('*popup_create')
 endif
 
 if !exists('g:quickpeek_auto')
-  let g:quickpeek_auto = v:true
+  let g:quickpeek_auto = v:false
 endif
 
 if !exists('g:quickpeek_popup_options')
