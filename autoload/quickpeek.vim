@@ -98,8 +98,8 @@ function! s:ShowPopup()
     call popup_close(b:quickpeek_popup)
   endif
 
-  let maxheight = get(g:quickpeek_popup_options, 'maxheight', 7)
-  let topline   = qf_entry.lnum - (maxheight / 2)
+  let maxheight  = get(g:quickpeek_popup_options, 'maxheight', 7)
+  let cursorline = qf_entry.lnum
 
   let options = {
         \ 'pos':    'botleft',
@@ -113,9 +113,12 @@ function! s:ShowPopup()
         \ 'maxwidth':  wininfo.width - 3,
         \ 'col':       wininfo.wincol,
         \ 'line':      wininfo.winrow - 2,
-        \ 'firstline': max([topline, 0]),
         \ })
 
   silent let b:quickpeek_popup = popup_create(qf_entry.bufnr, options)
+
+  call win_execute(b:quickpeek_popup, 'setlocal cursorline')
+  call win_execute(b:quickpeek_popup, 'normal! '.cursorline.'Gzz')
+
   call add(g:quickpeek_popups, b:quickpeek_popup)
 endfunction
