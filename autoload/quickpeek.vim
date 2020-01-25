@@ -38,14 +38,14 @@ endfunction
 
 function! s:ClearAllPopups()
   for p in g:quickpeek_popups
-    call popup_close(p)
+    call s:ClosePopup(p)
   endfor
   let g:quickpeek_popups = []
 endfunction
 
 function! s:HidePopup()
   if exists('b:quickpeek_popup')
-    call popup_close(b:quickpeek_popup)
+    call s:ClosePopup(b:quickpeek_popup)
     unlet b:quickpeek_popup
   endif
   unlet! b:quickpeek_line
@@ -56,12 +56,17 @@ function! s:MaybeShowPopup()
     return
   endif
 
-  if exists('*timer_start')
+  if exists('*timer_start') && !has('nvim')
     " Show the popup on the next tick, otherwise filetype detection doesn't
     " get triggered.
+    "
+    " Disabled for neovim since s:WinExecuteAll seems to execute stuff
+    " inbetween window switches.
+    "
     call timer_start(1, {-> s:ShowPopup()})
   else
-    " No timers available, let's just show the popup immediately.
+    " No timers available (or we're on neovim), let's just show the popup
+    " immediately.
     call s:ShowPopup()
   endif
 endfunction
@@ -103,7 +108,13 @@ function! s:ShowPopup()
     return
   endif
 
-  let maxheight = get(g:quickpeek_popup_options, 'maxheight', 7)
+  if exists('b:quickpeek_popup')
+    call s:ClosePopup(b:quickpeek_popup)
+  endif
+
+  let maxheight  = get(g:quickpeek_popup_options, 'maxheight', 7)
+  let cursorline = qf_entry.lnum
+
   let options = {
         \ 'pos':    'botleft',
         \ 'border': [],
@@ -118,14 +129,59 @@ function! s:ShowPopup()
         \ 'line':      wininfo.winrow - 2,
         \ })
 
-  silent let b:quickpeek_popup = popup_create(qf_entry.bufnr, options)
+  silent let b:quickpeek_popup = s:CreatePopup(qf_entry.bufnr, options)
 
+  let commands = []
   for setting in g:quickpeek_window_settings
-    call win_execute(b:quickpeek_popup, 'setlocal '.setting)
+    call add(commands, 'setlocal '.setting)
   endfor
-  if qf_entry.lnum > 0
-    call win_execute(b:quickpeek_popup, 'normal! '.qf_entry.lnum.'Gzz')
-  endif
+  call add(commands, 'normal! '.cursorline.'Gzz')
+  call s:WinExecuteAll(b:quickpeek_popup, commands)
 
   call add(g:quickpeek_popups, b:quickpeek_popup)
+endfunction
+
+function! s:CreatePopup(bufnr, options)
+  if exists('*popup_create')
+    return popup_create(a:bufnr, a:options)
+  elseif exists('*nvim_open_win')
+    return nvim_open_win(a:bufnr, 0, {
+          \ 'relative':  'win',
+          \ 'focusable': 0,
+          \ 'height':    a:options.maxheight,
+          \ 'width':     a:options.maxwidth + 3,
+          \ 'col':       a:options.col,
+          \ 'row':       -(a:options.maxheight + 1),
+          \ })
+  endif
+endfunction
+
+function! s:ClosePopup(popup)
+  if exists('*popup_close')
+    call popup_close(a:popup)
+  elseif exists('*nvim_win_close') && type(a:popup) != type(-1)
+    " we check the type to avoid neovim issues with -1 not being a "window
+    " handle"
+    call nvim_win_close(a:popup, 1)
+  endif
+endfunction
+
+function! s:WinExecuteAll(window, commands)
+  if exists('*win_execute')
+    for command in a:commands
+      call win_execute(a:window, command)
+    endfor
+  elseif exists('*nvim_set_current_win')
+    let current_win = nvim_get_current_win()
+
+    try
+      call nvim_set_current_win(a:window)
+
+      for command in a:commands
+        exe command
+      endfor
+    finally
+      call nvim_set_current_win(current_win)
+    endtry
+  endif
 endfunction

@@ -1,4 +1,4 @@
-if !exists('*popup_create')
+if !exists('*popup_create') && !exists('*nvim_open_win')
   " Then this version of Vim doesn't support popups
   finish
 endif

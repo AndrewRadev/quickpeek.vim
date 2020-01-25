@@ -6,7 +6,7 @@ let g:loaded_quickpeek = '0.1.0' " version number
 let s:keepcpo = &cpo
 set cpo&vim
 
-if !exists('*popup_create')
+if !exists('*popup_create') && !exists('*nvim_open_win')
   " Then this version of Vim doesn't support popups
   finish
 endif
