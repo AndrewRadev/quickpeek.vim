@@ -67,6 +67,10 @@ function! s:MaybeShowPopup()
 endfunction
 
 function! s:ShowPopup()
+  if exists('b:quickpeek_popup')
+    call popup_close(b:quickpeek_popup)
+  endif
+
   let wi = getwininfo(win_getid())[0]
   if wi.quickfix
     let qf_list = getqflist()
@@ -83,6 +87,11 @@ function! s:ShowPopup()
   let b:quickpeek_line = line('.')
   let qf_entry = qf_list[line('.') - 1]
 
+  if qf_entry.bufnr <= 0
+    " no buffer for this entry, nothing to preview
+    return
+  endif
+
   let wininfo = {}
   for item in getwininfo()
     if item.winnr == winnr()
@@ -94,13 +103,7 @@ function! s:ShowPopup()
     return
   endif
 
-  if exists('b:quickpeek_popup')
-    call popup_close(b:quickpeek_popup)
-  endif
-
-  let maxheight  = get(g:quickpeek_popup_options, 'maxheight', 7)
-  let cursorline = qf_entry.lnum
-
+  let maxheight = get(g:quickpeek_popup_options, 'maxheight', 7)
   let options = {
         \ 'pos':    'botleft',
         \ 'border': [],
@@ -120,7 +123,9 @@ function! s:ShowPopup()
   for setting in g:quickpeek_window_settings
     call win_execute(b:quickpeek_popup, 'setlocal '.setting)
   endfor
-  call win_execute(b:quickpeek_popup, 'normal! '.cursorline.'Gzz')
+  if qf_entry.lnum > 0
+    call win_execute(b:quickpeek_popup, 'normal! '.qf_entry.lnum.'Gzz')
+  endif
 
   call add(g:quickpeek_popups, b:quickpeek_popup)
 endfunction
