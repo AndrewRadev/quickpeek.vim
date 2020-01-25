@@ -19,6 +19,10 @@ if !exists('g:quickpeek_popup_options')
   let g:quickpeek_popup_options = {}
 endif
 
+if !exists('g:quickpeek_window_settings')
+  let g:quickpeek_window_settings = ['cursorline', 'number', 'relativenumber']
+endif
+
 let g:quickpeek_popups = []
 
 let &cpo = s:keepcpo

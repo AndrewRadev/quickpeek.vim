@@ -117,8 +117,9 @@ function! s:ShowPopup()
 
   silent let b:quickpeek_popup = popup_create(qf_entry.bufnr, options)
 
-  call win_execute(b:quickpeek_popup, 'setlocal number')
-  call win_execute(b:quickpeek_popup, 'setlocal cursorline')
+  for setting in g:quickpeek_window_settings
+    call win_execute(b:quickpeek_popup, 'setlocal '.setting)
+  endfor
   call win_execute(b:quickpeek_popup, 'normal! '.cursorline.'Gzz')
 
   call add(g:quickpeek_popups, b:quickpeek_popup)

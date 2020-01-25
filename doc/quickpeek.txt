@@ -106,6 +106,18 @@ instance, adding a close button will work, but a new preview popup is created
 on every move to a different line, so closing a popup might not do what you'd
 intuitively expect it to.
 
+                                                   *g:quickpeek_window_settings*
+>
+    let g:quickpeek_window_settings = []
+<
+Default value: ["cursorline", "number", "relativenumber"]
+
+A list of settings to turn on in the quickpeek popup window. Each of these is
+executed with |:setlocal|. The default values provide a cursorline and
+(relative) line numbers, because that seems like a reasonable default for a
+peek into context around a particular line. If you'd like to remove them, just
+set the variable to an empty array.
+
 
 ==============================================================================
 ISSUES                                                        *quickpeek-issues*
