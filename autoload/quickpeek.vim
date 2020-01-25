@@ -20,7 +20,7 @@ function! quickpeek#Start()
     autocmd WinLeave    <buffer> call s:HidePopup()
     autocmd WinEnter    <buffer> call s:MaybeShowPopup()
 
-    autocmd FileType * if &ft != 'qf' | call s:ClearAllPopups() | endif
+    autocmd BufEnter * if &buftype != 'quickfix' | call s:ClearAllPopups() | endif
   augroup END
 
   call s:ShowPopup()
