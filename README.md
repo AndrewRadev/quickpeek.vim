@@ -1,4 +1,6 @@
-![Screenshot](http://i.andrewradev.com/88051d292a4314f88151f0887c845838.jpg)
+[![GitHub version](https://badge.fury.io/gh/andrewradev%2Fquickpeek.vim.svg)](https://badge.fury.io/gh/andrewradev%2Fquickpeek.vim)
+
+![Screenshot](http://i.andrewradev.com/6804b403afed3e709d33b6c15c01c3f8.png)
 
 ## Usage
 
