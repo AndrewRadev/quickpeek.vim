@@ -12,7 +12,7 @@ function! quickpeek#Start()
   endif
 
   let b:quickpeek_active = v:true
-  let b:quickpeek_popup  = -1
+  " let b:quickpeek_popup  = -1
 
   exe "augroup quickpeek_popup_".bufnr('%')
     autocmd!
@@ -73,7 +73,7 @@ endfunction
 
 function! s:ShowPopup()
   if exists('b:quickpeek_popup')
-    call popup_close(b:quickpeek_popup)
+    call s:ClosePopup(b:quickpeek_popup)
   endif
 
   let wi = getwininfo(win_getid())[0]
@@ -129,12 +129,13 @@ function! s:ShowPopup()
         \ 'line':      wininfo.winrow - 2,
         \ })
 
-  silent let b:quickpeek_popup = s:CreatePopup(qf_entry.bufnr, options)
+  let b:quickpeek_popup = s:CreatePopup(qf_entry.bufnr, options)
 
   let commands = []
   for setting in g:quickpeek_window_settings
     call add(commands, 'setlocal '.setting)
   endfor
+  call add(commands, 'normal! zR')
   call add(commands, 'normal! '.cursorline.'Gzz')
   call s:WinExecuteAll(b:quickpeek_popup, commands)
 
@@ -159,10 +160,10 @@ endfunction
 function! s:ClosePopup(popup)
   if exists('*popup_close')
     call popup_close(a:popup)
-  elseif exists('*nvim_win_close') && type(a:popup) != type(-1)
-    " we check the type to avoid neovim issues with -1 not being a "window
-    " handle"
-    call nvim_win_close(a:popup, 1)
+  elseif exists('*nvim_win_close')
+    if nvim_win_is_valid(a:popup)
+      call nvim_win_close(a:popup, 1)
+    endif
   endif
 endfunction
 
@@ -172,6 +173,10 @@ function! s:WinExecuteAll(window, commands)
       call win_execute(a:window, command)
     endfor
   elseif exists('*nvim_set_current_win')
+    if !nvim_win_is_valid(a:window)
+      return
+    endif
+
     let current_win = nvim_get_current_win()
 
     try
