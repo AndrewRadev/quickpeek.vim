@@ -12,7 +12,6 @@ function! quickpeek#Start()
   endif
 
   let b:quickpeek_active = v:true
-  " let b:quickpeek_popup  = -1
 
   exe "augroup quickpeek_popup_".bufnr('%')
     autocmd!
@@ -123,8 +122,8 @@ function! s:ShowPopup()
   call extend(options, g:quickpeek_popup_options)
   call extend(options, {
         \ 'maxheight': maxheight,
-        \ 'minwidth':  wininfo.width - 3,
-        \ 'maxwidth':  wininfo.width - 3,
+        \ 'minwidth':  wininfo.width - 2,
+        \ 'maxwidth':  wininfo.width - 2,
         \ 'col':       wininfo.wincol,
         \ 'line':      wininfo.winrow - 2,
         \ })
@@ -139,7 +138,9 @@ function! s:ShowPopup()
   call add(commands, 'normal! '.cursorline.'Gzz')
   call s:WinExecuteAll(b:quickpeek_popup, commands)
 
-  call add(g:quickpeek_popups, b:quickpeek_popup)
+  if exists('b:quickpeek_popup')
+    call add(g:quickpeek_popups, b:quickpeek_popup)
+  endif
 endfunction
 
 function! s:CreatePopup(bufnr, options)
@@ -185,6 +186,9 @@ function! s:WinExecuteAll(window, commands)
       for command in a:commands
         exe command
       endfor
+    catch /E5555/
+      " creating the popup failed, for some reason (always happens first time
+      " in neovim?)
     finally
       call nvim_set_current_win(current_win)
     endtry
