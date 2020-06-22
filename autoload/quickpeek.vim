@@ -72,10 +72,10 @@ function! s:ShowPopup()
   endif
 
   let wi = getwininfo(win_getid())[0]
-  if wi.quickfix
-    let qf_list = getqflist()
-  elseif wi.loclist
+  if wi.loclist
     let qf_list = getloclist(0)
+  elseif wi.quickfix
+    let qf_list = getqflist()
   else
     let qf_list = []
   endif
