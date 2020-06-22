@@ -71,10 +71,10 @@ function! s:ShowPopup()
     call popup_close(b:quickpeek_popup)
   endif
 
-  let wi = getwininfo(win_getid())[0]
-  if wi.loclist
+  let wininfo = getwininfo(win_getid())[0]
+  if wininfo.loclist
     let qf_list = getloclist(0)
-  elseif wi.quickfix
+  elseif wininfo.quickfix
     let qf_list = getqflist()
   else
     let qf_list = []
@@ -89,17 +89,6 @@ function! s:ShowPopup()
 
   if qf_entry.bufnr <= 0
     " no buffer for this entry, nothing to preview
-    return
-  endif
-
-  let wininfo = {}
-  for item in getwininfo()
-    if item.winnr == winnr()
-      let wininfo = item
-      break
-    endif
-  endfor
-  if wininfo == {}
     return
   endif
 
