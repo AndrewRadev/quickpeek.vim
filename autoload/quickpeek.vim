@@ -93,10 +93,11 @@ function! s:ShowPopup()
   endif
 
   let maxheight = get(g:quickpeek_popup_options, 'maxheight', 7)
+  let title = $' {qf_entry.bufnr->bufname()->fnamemodify(':~:.')} '
   let options = {
         \ 'pos':    'botleft',
         \ 'border': [],
-        \ 'title':  "Quickpeek"
+        \ 'title':  title
         \ }
   call extend(options, g:quickpeek_popup_options)
   call extend(options, {
