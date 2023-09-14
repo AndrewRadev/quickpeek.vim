@@ -66,20 +66,6 @@ function! s:MaybeShowPopup()
   endif
 endfunction
 
-let g:quickpeek_popup_scroll_up_key = get(g:, 'quickpeek_popup_scroll_up_key', "\<c-k>")
-let g:quickpeek_popup_scroll_down_key = get(g:, 'quickpeek_popup_scroll_down_key', "\<c-j>")
-
-function! s:PopupFilter(winid, key)
-  if !empty('g:quickpeek_popup_scroll_up_key') && a:key == g:quickpeek_popup_scroll_up_key
-    call win_execute(a:winid, "normal! \<c-y>")
-    return v:true
-  elseif !empty('g:quickpeek_popup_scroll_down_key') && a:key == g:quickpeek_popup_scroll_down_key
-    call win_execute(a:winid, "normal! \<c-e>")
-    return v:true
-  endif
-  return v:false
-endfunction
-
 function! s:ShowPopup()
   if exists('b:quickpeek_popup')
     call popup_close(b:quickpeek_popup)
@@ -133,4 +119,15 @@ function! s:ShowPopup()
   endif
 
   call add(g:quickpeek_popups, b:quickpeek_popup)
+endfunction
+
+function! s:PopupFilter(winid, key)
+  if !empty('g:quickpeek_popup_scroll_up_key') && a:key == g:quickpeek_popup_scroll_up_key
+    call win_execute(a:winid, "normal! \<c-y>")
+    return v:true
+  elseif !empty('g:quickpeek_popup_scroll_down_key') && a:key == g:quickpeek_popup_scroll_down_key
+    call win_execute(a:winid, "normal! \<c-e>")
+    return v:true
+  endif
+  return v:false
 endfunction

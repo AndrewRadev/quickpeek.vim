@@ -23,6 +23,14 @@ if !exists('g:quickpeek_window_settings')
   let g:quickpeek_window_settings = ['cursorline', 'number', 'relativenumber']
 endif
 
+if !exists('g:quickpeek_popup_scroll_up_key')
+  let g:quickpeek_popup_scroll_up_key = "\<c-k>"
+endif
+
+if !exists('g:quickpeek_popup_scroll_down_key')
+  let g:quickpeek_popup_scroll_down_key = "\<c-j>"
+endif
+
 let g:quickpeek_popups = []
 
 let &cpo = s:keepcpo

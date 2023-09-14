@@ -97,8 +97,8 @@ call. For example:
         \ 'time':        3000,
         \ }
 <
-This will change the title from "Quickpeek" to "Preview", give the border a
-more ASCII look, and hide the popup in 3 seconds.
+This will change the title to "Preview" (by default, it's the name of the
+buffer), give the border a more ASCII look, and hide the popup in 3 seconds.
 
 The full list of options can be read in the helpfiles for
 |popup_create-arguments|. Some options won't really make sense -- for
@@ -117,6 +117,21 @@ executed with |:setlocal|. The default values provide a cursorline and
 (relative) line numbers, because that seems like a reasonable default for a
 peek into context around a particular line. If you'd like to remove them, just
 set the variable to an empty array.
+
+                                               *g:quickpeek_popup_scroll_up_key*
+                                             *g:quickpeek_popup_scroll_down_key*
+>
+    let g:quickpeek_popup_scroll_up_key   = ""
+    let g:quickpeek_popup_scroll_down_key = ""
+<
+Default value: "\<c-k>" and "\<c-j>", respectively
+
+These two keys can be used to scroll the preview window up and down. By
+default, they're mapped to <c-k> and <c-j>, but if you use those mappings for
+other things, or you just want something different, these are the settings to
+change.
+
+Set any of them to an empty string to avoid setting up a mapping.
 
 
 ==============================================================================
