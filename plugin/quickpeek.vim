@@ -31,6 +31,10 @@ if !exists('g:quickpeek_popup_scroll_down_key')
   let g:quickpeek_popup_scroll_down_key = "\<c-j>"
 endif
 
+if !exists('g:quickpeek_delay')
+  let g:quickpeek_delay = 100
+endif
+
 let g:quickpeek_popups = []
 
 let &cpo = s:keepcpo

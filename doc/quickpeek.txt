@@ -133,6 +133,22 @@ change.
 
 Set any of them to an empty string to avoid setting up a mapping.
 
+                                                             *g:quickpeek_delay*
+>
+    let g:quickpeek_delay = 200
+<
+Default value: 100
+
+The default time delay before updating the popup. Setting this to 0 will
+ensure that the popup is updated in the next iteration of Vim's event loop.
+If you scroll through the list by holding j/k, this may slow it down a bit.
+
+The default value of 100ms makes it smoother to scroll fast through the list,
+and it updates fast enough that it shouldn't be practically inconvenient.
+
+This is implemented by using |timer_start()|, so if your Vim doesn't have
+|+timers|, there will be no delay.
+
 
 ==============================================================================
 ISSUES                                                        *quickpeek-issues*

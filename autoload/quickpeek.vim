@@ -1,3 +1,5 @@
+let s:timer_id = -1
+
 function! quickpeek#Toggle()
   if get(b:, 'quickpeek_active', v:false)
     call quickpeek#Stop()
@@ -57,9 +59,13 @@ function! s:MaybeShowPopup()
   endif
 
   if exists('*timer_start')
-    " Show the popup on the next tick, otherwise filetype detection doesn't
-    " get triggered.
-    call timer_start(1, {-> s:ShowPopup()})
+    " Show the popup after a timeout, otherwise filetype detection doesn't get
+    " triggered. The timeout is debounced to avoid issues with fast scrolling.
+    if s:timer_id > 0
+      call timer_stop(s:timer_id)
+    endif
+
+    let s:timer_id = timer_start(g:quickpeek_delay, {-> s:ShowPopup()})
   else
     " No timers available, let's just show the popup immediately.
     call s:ShowPopup()
@@ -67,6 +73,8 @@ function! s:MaybeShowPopup()
 endfunction
 
 function! s:ShowPopup()
+  let s:timer_id = -1
+
   if exists('b:quickpeek_popup')
     call popup_close(b:quickpeek_popup)
   endif
