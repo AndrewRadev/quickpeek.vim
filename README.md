@@ -42,6 +42,7 @@ If you get the value of "1", that means you have popup support.
 
 - The [quickr-preview](https://github.com/ronakg/quickr-preview.vim) plugin provides previews of quickfix items in customizable buffers.
 - The [quickui](https://github.com/skywind3000/vim-quickui#preview-quickfix) plugin has a preview popup as well, although it comes with a lot of other functionality.
+- The [qfpreview.nvim](https://github.com/r0nsha/qfpreview.nvim) plugin is a similar tool for Neovim.
 
 ## Contributing
 
